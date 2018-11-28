@@ -7,61 +7,37 @@
     <meta name="kuvaus" content="Web-sovellus, joka näyttää valitun Finnkino teatterin sen päiväiset näytökset ja näytös ajat.">
     <title>MIAULXRAFFE</title>
     <link href="style.css" rel="stylesheet">
+    <script>
+    </script>
   </head>
   <body>
                 <form onsubmit="return false">
-                <input id="item" name="item" rows="1" cols="25"></input>
-                <select name="day" id="day">
+                <input id="teatteri" name="teatteri" rows="1" cols="25"></input>
+                <select name="teatteri" id="Valitse teatteri">
                     <option value="Day">Day</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <option value="26">26</option>
-                    <option value="27">27</option>
-                    <option value="28">28</option>
-                    <option value="29">29</option>
-                    <option value="30">30</option>
-                    <option value="31">31</option>
-                </select>
-                <select name="month" id="month">
-                    <option value="month">Month</option>
+    </select>
+                  <input id="paiva" name="paiva" rows="1" cols="25"></input>
+                <select name="aika" id="aika">
+                    <option value="aikataulu">Valitse päivä</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                </select>
+   </select>
+                  <input id="elokuva" name="elokuva" rows="1" cols="25"></input>
+                <select name="elokuva" id="elokuva">
+                    <option value="Day">Valitse Elokuva</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+</select>
                 <br>
-                <input type="submit" value="Add" onclick="printItem()"></button>
+                <input type="submit" value="Näytä ohjelmisto" onclick="printItem()"></button>
 </form>
   </body>
 </html>
