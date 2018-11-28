@@ -1,0 +1,14 @@
+<!doctype html>
+
+<html lang="fi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="MIAULXRAFFE" content="KoodiMursu, OttoKainalo">
+    <meta name="kuvaus" content="Web-sovellus, joka näyttää valitun Finnkino teatterin sen päiväiset näytökset ja näytös ajat.">
+    <title>MIAULXRAFFE</title>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+
+  </body>
+</html>
