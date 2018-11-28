@@ -10,9 +10,9 @@
     <script>
       function showmovies{
         var x = document.forms[0];
-        var teatteri = x.teatteri;
-        var aika = x.aika;
-        var elokuva = x.elokuva;
+        var teatteri = x.teatteri.value;
+        var aika = x.aika.value;
+        var elokuva = x.elokuva.value;
         
         alert("Arvot valittu:\nteatteri:" + x.teatteri, "\npäivämäärä:" + x.aika + "\nelokuva:" + x.elokuva);
         console.log("Arvot valittu:\nteatteri:" + x.teatteri, "\npäivämäärä:" + x.aika + "\nelokuva:" + x.elokuva);
