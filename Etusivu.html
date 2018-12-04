@@ -7,20 +7,36 @@
     <meta name="kuvaus" content="Web-sovellus, joka näyttää valitun Finnkino teatterin sen päiväiset näytökset ja näytös ajat.">
     <title>MIAULXRAFFE</title>
     <link href="style.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js">
+    <script
+			  src="http://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+	<script>
       
       function showmovies(){
-        var x = document.forms[0];
+       /* var x = document.forms[0];
         var teatteri = x.teatteri.value;
         var aika = x.aika.value;
         var elokuva = x.elokuva.value;
         
         alert("Valitut arvot ovat teatteri: " + teatteri + ", aikataulu:" + aika + ", elokuva:" + elokuva);
-        console.log("Arvot valittu:\nteatteri:" + teatteri + "\naikataulu:" + aika + "\nelokuva:" + elokuva);
-      $.get("https://www.finnkino.fi/xml/TheatreAreas/", function( data ): {
+        console.log("Arvot valittu:\nteatteri:" + teatteri + "\naikataulu:" + aika + "\nelokuva:" + elokuva); */
+     /* $.get("https://www.finnkino.fi/xml/TheatreAreas/", function( data ) {
         $(".result").html( data );
-        console.log("Ajax suoritettu!"):
-      });
+        console.log("Ajax suoritettu!");
+      }); */
+	  $( ".result" ).load( "https://www.finnkino.fi/xml/TheatreAreas/", function(teatteridata) {
+  alert( "Load was performed." );
+  alert(teatteridata);
+  });
+  	  $( ".result" ).load( "https://www.finnkino.fi/xml/ScheduleDates/", function(aikadata) {
+  alert( "Load was performed." );
+  alert(aikadata);
+});
+  	  $( ".result" ).load( "https://www.finnkino.fi/xml/Schedule/", function(elokuvadata) {
+  alert( "Load was performed." );
+  alert(elokuvadata);
+});
       }
     </script>
   </head>
