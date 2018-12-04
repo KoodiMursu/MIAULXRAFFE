@@ -7,7 +7,8 @@
     <meta name="kuvaus" content="Web-sovellus, joka näyttää valitun Finnkino teatterin sen päiväiset näytökset ja näytös ajat.">
     <title>MIAULXRAFFE</title>
     <link href="style.css" rel="stylesheet">
-    <script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js">
+      
       function showmovies(){
         var x = document.forms[0];
         var teatteri = x.teatteri.value;
@@ -16,6 +17,10 @@
         
         alert("Valitut arvot ovat teatteri: " + teatteri + ", aikataulu:" + aika + ", elokuva:" + elokuva);
         console.log("Arvot valittu:\nteatteri:" + teatteri + "\naikataulu:" + aika + "\nelokuva:" + elokuva);
+      $.get("https://www.finnkino.fi/xml/TheatreAreas/", function( data ): {
+        $(".result").html( data );
+        console.log("Ajax suoritettu!"):
+      });
       }
     </script>
   </head>
@@ -47,6 +52,8 @@
 </select>
                 <br>
                 <input type="submit" value="Näytä ohjelmisto" onclick="showmovies()"></button>
+    <div class = "result">
+    </div>
 </form>
   </body>
 </html>
