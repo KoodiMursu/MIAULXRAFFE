@@ -13,10 +13,25 @@
 			  crossorigin="anonymous"></script>
 	<script>
 
-//funktio joka sivun avautuessa lataa dropdowniin teatterit
-function loadTheatres() {
+  $(document).ready(function () {
+  loadTheatres();
+  });
 
-}
+//lataa teatterit 
+  function loadTheatres() {
+  $(".result").load("https://www.finnkino.fi/xml/TheatreAreas/", function (teatteridata) {
+  console.log(teatteridata);
+  xmlDoc = $.parseXML(teatteridata),
+  $xml = $(xmlDoc),
+  $name = $xml.find("Name");
+  var dropDown = $('#teatteri');
+  $.each($name, function (val, text) {
+  dropDown.append(
+  $('<option></option>').val(val.innerHTML).html(text)
+  );
+  });
+  });
+  }
 
 //testifunktio joka näyttää apin tulokset sivulla
       function showmovies(){
@@ -29,18 +44,18 @@ function loadTheatres() {
         console.log("Arvot valittu:\nteatteri:" + teatteri + "\naikataulu:" + aika + "\nelokuva:" + elokuva);
       $.get("https://www.finnkino.fi/xml/TheatreAreas/", function( data ) {
         $(".result").html( data );
-        console.log("Ajax suoritettu!");
+        console.log("A suoritettu!");
       });
 	  $( ".result" ).load( "https://www.finnkino.fi/xml/TheatreAreas/", function(teatteridata) {
-  console.log( "Load was performed." );
+  console.log( "B was performed." );
   console.log(teatteridata);
   });
   	  $( ".result" ).load( "https://www.finnkino.fi/xml/ScheduleDates/", function(aikadata) {
-  console.log( "Load was performed." );
+  console.log( "C was performed." );
   console.log(aikadata);
 });
   	  $( ".result" ).load( "https://www.finnkino.fi/xml/Schedule/", function(elokuvadata) {
-  console.log( "Load was performed." );
+  console.log( "D was performed." );
   console.log(elokuvadata);
 });
       }
@@ -63,10 +78,6 @@ function loadTheatres() {
 				<br>
                 <select name="teatteri" id="teatteri">
                     <option value="teatteri">Valitse Teatteri</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
     </select>
 
                 <select name="aika" id="aika">
