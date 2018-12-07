@@ -15,6 +15,7 @@
 
   $(document).ready(function () {
   loadTheatres();
+  loadSchedule();
   });
 
 //lataa teatterit 
@@ -32,6 +33,24 @@
   });
   });
   }
+  
+  //lataa aikataulut
+  function loadSchedule() {
+  $( ".result" ).load( "https://www.finnkino.fi/xml/ScheduleDates/", function(aikadata) {
+  console.log(aikadata);
+  xmlDoc2 = $.parseXML(aikadata),
+  $xml2 = $(xmlDoc2),
+  $time = $xml2.find("dateTime");
+  var dropDown = $('#aika');
+  $.each($time, function (val, text) {
+  dropDown.append(
+  $('<option></option>').val(val.innerHTML).html(text)
+  );
+  });
+  });
+  }
+
+
 
 //testifunktio joka näyttää apin tulokset sivulla
       function showmovies(){
@@ -73,34 +92,35 @@
   <br>
   <br>
   <br>
+  <br>
+  <br>
+  <br>
   </div>
                 <form onsubmit="return false">
 				<br>
                 <select name="teatteri" id="teatteri">
-                    <option value="teatteri">Valitse Teatteri</option>
+
     </select>
 
                 <select name="aika" id="aika">
-                    <option value="aika">Valitse päivä</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
+
+
    </select>
 
                 <select name="elokuva" id="elokuva">
                     <option value="elokuva">Valitse elokuva</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
+
 </select>
                 <br>
                 <button type="submit" class="Go" onclick="showmovies()"><span>Näytä ohjelmisto</span></button>
+
 				</form>
 				<br>
 				</div>
 <div class= "reunafilmi">
+  <br>
+  <br>
+  <br>
   <br>
   <br>
   <br>
