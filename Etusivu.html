@@ -13,12 +13,32 @@
 			  crossorigin="anonymous"></script>
 	<script>
 
+//suorittaa funktiot sivun latautuessa
   $(document).ready(function () {
   loadTheatres();
   loadSchedule();
+  loadMovies();
   });
 
-//lataa teatterit 
+
+  //lataa leffat dropdowniin
+    function loadMovies() {
+    $(".result").load("https://www.finnkino.fi/xml/Schedule/", function (elokuvadata) {
+    console.log(elokuvadata);
+    xmlDoc = $.parseXML(elokuvadata),
+    $xml = $(xmlDoc),
+    $name = $xml.find("Title");
+    var dropDown = $('#elokuva');
+    $.each($name, function (val, text) {
+    dropDown.append(
+    $('<option></option>').val(val.innerHTML).html(text)
+    );
+    });
+    });
+    }
+
+
+//lataa teatterit dropdowniin
   function loadTheatres() {
   $(".result").load("https://www.finnkino.fi/xml/TheatreAreas/", function (teatteridata) {
   console.log(teatteridata);
@@ -33,7 +53,7 @@
   });
   });
   }
-  
+
   //lataa aikataulut
   function loadSchedule() {
   $( ".result" ).load( "https://www.finnkino.fi/xml/ScheduleDates/", function(aikadata) {
@@ -52,7 +72,7 @@
 
 
 
-//testifunktio joka näyttää apin tulokset sivulla
+//funktio joka näyttää apin tulokset sivulla
       function showmovies(){
        var x = document.forms[0];
         var teatteri = x.teatteri.value;
@@ -108,7 +128,6 @@
    </select>
 
                 <select name="elokuva" id="elokuva">
-                    <option value="elokuva">Valitse elokuva</option>
 
 </select>
                 <br>
