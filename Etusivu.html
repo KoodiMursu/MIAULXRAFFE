@@ -71,9 +71,23 @@
   }
 
 
+/*
+function showMovies(){
+
+  if (teatterivalue = null){
+  show all movies on day X
+  }
+
+  else if (movievalue = null && ){
+  show all movies  on day X, in theater X
+  }
+}
+*/
+
 
 //funktio joka näyttää apin tulokset sivulla
-      function showmovies(){
+
+/*      function showmovies(){
        var x = document.forms[0];
         var teatteri = x.teatteri.value;
         var aika = x.aika.value;
@@ -97,7 +111,9 @@
   console.log( "D was performed." );
   console.log(elokuvadata);
 });
+
       }
+      */
     </script>
   </head>
   <body>
@@ -123,12 +139,12 @@
     </select>
 
                 <select name="aika" id="aika">
-
+                  <option selected value="base">Tänään</option>
 
    </select>
 
                 <select name="elokuva" id="elokuva">
-
+                  <option selected value="base">Valitse Elokuva</option>
 </select>
                 <br>
                 <button type="submit" class="Go" onclick="showmovies()"><span>Näytä ohjelmisto</span></button>
