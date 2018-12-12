@@ -98,7 +98,7 @@
           $xml = $(xmlDoc),
           $shows = $xml.find("Show"); //jquery joka etsii showt
           $('#elokuva').empty(); // poistaa edelliset vaihtoehdot
-        //  $('#elokuva').append('<option value=' + eventid + '>' + Kaikki elokuvat + '</option>');
+          $('#elokuva').append('<option> Kaikki elokuvat </option>');
         $.each($shows, function (val, text) { //jquery joka suorittaa funktion jokaiselle listan showlle
 
           var eventid = $(this).find('EventID').text(); //määrittelee leffan id:n
@@ -116,7 +116,7 @@
             xmlDoc = $.parseXML(elokuvadata), //parsee elokuvadatan xml muotoon
               $xml = $(xmlDoc),
               $shows = $xml.find("Show"); //jquery joka etsii showt
-              $(".show").remove(); //????
+              $(".show").remove(); //poistaa edelliset tulokset
             $.each($shows, function (val, text) { //jquery joka suorittaa funktion jokaiselle leffalle
 
 
@@ -127,8 +127,8 @@
               var theatre = $(this).find('Theatre').text(); //ja teatterin
 
 
-                //lisää ylläolevat muuttujat listaan
-              $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");
+
+              $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");//lisää ylläolevat muuttujat listaan
             });
           });
 
@@ -187,7 +187,7 @@
         <option selected value="base">Valitse Elokuva</option>
       </select>
       <br>
-      <button type="submit" class="Go" onclick="showmovies()"><span>Näytä ohjelmisto</span></button>
+      <button type="submit" class="Go" onclick="showmovies();loadSchedule(getSelectedTheatre(), getSelectedTime());"><span>Näytä ohjelmisto</span></button>
 
     </form>
     <br>
