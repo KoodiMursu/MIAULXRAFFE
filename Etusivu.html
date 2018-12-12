@@ -145,11 +145,12 @@
           var date = new Date(str);
 
           // lisää etunollan minuutteihin
-          if(date.getMinutes()+"".length<2){
+          if(date.getMinutes()<10){
             return date.getHours()+ ":0"+ date.getMinutes();
           }
 
           //hakee tunnit:minuutit
+          else
           return date.getHours()+ ":"+ date.getMinutes();
         }
   </script>
