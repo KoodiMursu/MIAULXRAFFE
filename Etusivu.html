@@ -21,6 +21,7 @@
       loadTheatres();
       loadScheduleDates();
       loadSchedule(getSelectedTheatre(), getSelectedTime());
+	  showfadein();
 
 
       // suorittaa funktiot aina kun teatteriarvoa muutetaan
@@ -34,10 +35,23 @@
         loadSchedule();
       })
     });
+	
+// Piiloittaa otsikot ja listan pohjan. Lisäksi funtio tuo otsikot näkyviin FadeIn-funktiolla.
+	function showfadein() {
+    $(document).ready(function(){
+        $("h1").hide();		//Piiloittaa ison otsikon
+		$("#lista").hide();		//Piiloittaa listan pohjan näkyvistä
+		$(".banner h2").hide();		//Piiloittaa ppienemmän otsikon
+		$("h1").fadeIn("slow");		// Tuo isomman otsikon näkyviin fadeIn animaatiolla
+		$(".banner h2").fadeIn(3000);	// Tuo pienemmän otsikon näkyviin fadeIn animaatiolla hitaammin
+
+    });
+	}
 
 //lataa teatterit siihen kuuluvaan dropdowniin
     function loadTheatres() {
-      $(".result").load("https://www.finnkino.fi/xml/TheatreAreas/", function (teatteridata) { //jquery joka lataa teatterit resulttiin
+
+	  $(".result").load("https://www.finnkino.fi/xml/TheatreAreas/", function (teatteridata) { //jquery joka lataa teatterit resulttiin
         xmlDoc = $.parseXML(teatteridata), //parsee xml muotoon
           $xml = $(xmlDoc),
           $TheatreArea = $xml.find("TheatreArea");
@@ -111,6 +125,7 @@
 
     //lataa haun kriteerien perusteella näytösajat
         function showmovies() {
+		  $("#lista").fadeIn();	// Tuo listan näkyviin fadein animaatiolla
           console.log("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie());
           $(".result").load("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie(), function (elokuvadata) { //lataa tulokset resultteihin
             xmlDoc = $.parseXML(elokuvadata), //parsee elokuvadatan xml muotoon
@@ -128,8 +143,10 @@
 
 
 
-              $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");//lisää ylläolevat muuttujat listaan
-            });
+              
+			  $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");//lisää ylläolevat muuttujat listaan
+                    $("#lista").fadeIn(3000);
+			});
           });
 
         }
@@ -188,8 +205,8 @@
         <option selected value="base">Valitse Elokuva</option>
       </select>
       <br>
-      <button type="submit" class="Go" onclick="showmovies();loadSchedule(getSelectedTheatre(), getSelectedTime());"><span>Näytä ohjelmisto</span></button>
-
+      <center><button type="submit" class="Go" onclick="showmovies();loadSchedule(getSelectedTheatre(), getSelectedTime());"><span>Näytä ohjelmisto</span></button>
+	</center>
     </form>
     <br>
   </div>
@@ -204,7 +221,7 @@
     <br>
     <br>
   </div>
-  <div class="result" style="display: none;">
+  <div class="result">
   </div>
   <table id="lista">
     <tr>
