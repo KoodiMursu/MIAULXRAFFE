@@ -1,0 +1,272 @@
+<!doctype html>
+
+<html lang="fi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="MIAULXRAFFE" content="KoodiMursu, OssiKainalo">
+  <meta name="kuvaus" content="Web-sovellus, joka näyttää valitun Finnkino teatterin sen päiväiset näytökset ja näytösajat.">
+  <title>MIAULXRAFFE</title>
+  <link href="style.css" rel="stylesheet">
+  <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"     
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
+
+  <script> <!-- JavaScript alkaa -->
+
+    //suorittaa funktiot sivun latautuessa
+    $(document).ready(function () { //jquery joka tekee juttuja kun sivu latautuu
+      
+	  loadTheatres();
+      loadScheduleDates();
+      loadSchedule(getSelectedTheatre(), getSelectedTime());
+	  showfadein();
+
+
+      // suorittaa funktiot aina kun teatteriarvoa muutetaan
+      $("#teatteri").change(function() { //jquery joka tekee juttuja kun objektia muutetaan
+        loadScheduleDates();
+        loadSchedule();
+      })
+
+       // suorittaa funktion aina kun aika-arvoa muutetaan
+       $("#aika").change(function() { //jquery joka tekee juttuja kun objektia muutetaan
+        loadSchedule();
+      })
+    });
+	
+// Piiloittaa otsikot ja listan pohjan sivulta näkyvistä. Lisäksi funtio tuo otsikot näkyviin FadeIn-funktiolla.
+	function showfadein() {
+    $(document).ready(function(){
+        $("h1").hide();		//Piiloittaa ison otsikon
+		$("#lista").hide();		//Piiloittaa listan pohjan näkyvistä
+		$(".banner h2").hide();		//Piiloittaa ppienemmän otsikon
+		$("h1").fadeIn("slow");		// Tuo isomman otsikon näkyviin fadeIn animaatiolla
+		$(".banner h2").fadeIn(3000);	// Tuo pienemmän otsikon näkyviin fadeIn animaatiolla hitaammin
+
+    });
+	}
+
+//lataa teatterit siihen kuuluvaan dropdowniin
+    function loadTheatres() {
+
+	  $(".result").load("https://www.finnkino.fi/xml/TheatreAreas/", function (teatteridata) { //jquery joka lataa teatterit resulttiin
+        xmlDoc = $.parseXML(teatteridata), //parsee xml muotoon
+          $xml = $(xmlDoc),
+          $TheatreArea = $xml.find("TheatreArea");
+        $TheatreArea.each(function () { //jquery joka suorittaa funktion jokaiselle listan teatterille
+
+          var id = $(this).find('ID').text(); //määrittää id:ksi apista löytyvän id:n
+          var name = $(this).find('Name').text(); //määrittää teatterin nimeksi apista löytyvän nimen
+
+          $('#teatteri').append('<option value=' + id + '>' + name + '</option>'); //täyttää dropdownin apin teattereilla
+
+        });
+      });
+    }
+
+    //lataa aikataulut
+    function loadScheduleDates() {
+      var area;
+
+      if (getSelectedTheatre() == null) { //jos teatterikenttä on tyhjä () valitaan sille oletusid
+        area = 1029;
+      } else {
+        area = getSelectedTheatre(); //muuten ajat poimitaan valitun teatterin mukaan
+      }
+
+      $(".result").load("https://www.finnkino.fi/xml/ScheduleDates/?area=" + area, function (aikadata) { //lataa annetun arean ajat
+        xmlDoc2 = $.parseXML(aikadata), //parsee xml muotoon
+          $xml2 = $(xmlDoc2),
+          $time = $xml2.find("dateTime"); //jquery joka etsii kaikki dateTimet
+        $('#aika').empty(); // poista edelliset
+        $.each($time, function (val, text) { //jquery joka suorittaa funktion jokaiselle listan ajalle
+          console.log(text)
+          $('#aika').append('<option value=' + text.innerHTML + '>' + dateFormat(text.innerHTML) + '</option>'); //lisää aika dropdowniin ajat
+        });
+      });
+    }
+
+    //tuo käyttäjän valitseman teatterin valuen
+    function getSelectedTheatre() {
+      return $('select[name=teatteri] option:selected').val();
+    }
+
+//tuo käyttäjän valitseman ajan valuen
+    function getSelectedTime() {
+      return $('select[name=aika] option:selected').val();
+    }
+
+//tuo käyttäjän valitseman leffan valuen
+    function getSelectedMovie() {
+      return $('select[name=elokuva] option:selected').val();
+    }
+
+
+    //funktio joka hakee elokuvat
+    function loadSchedule(area, dt) { //urlin parametreiksi areaid & date
+      console.log("https://www.finnkino.fi/xml/Schedule/?area="+area+"&dt="+dateFormat(dt));
+      $(".result").load("https://www.finnkino.fi/xml/Schedule/?area="+area+"&dt="+dateFormat(dt), function (elokuvadata) { //jquery joka lataa apista löytyvät tulokset resulttiin
+        xmlDoc = $.parseXML(elokuvadata), //parsee xml muotoon
+          $xml = $(xmlDoc),
+          $shows = $xml.find("Show"); //jquery joka etsii showt
+          $('#elokuva').empty(); // poistaa edelliset vaihtoehdot
+          $('#elokuva').append('<option> Kaikki elokuvat </option>');
+        $.each($shows, function (val, text) { //jquery joka suorittaa funktion jokaiselle listan showlle
+
+          var eventid = $(this).find('EventID').text(); //määrittelee leffan id:n
+          var title = $(this).find('Title').text(); //määrittelee leffan nimen
+
+          $('#elokuva').append('<option value=' + eventid + '>' + title + '</option>'); //lisää leffat dropdowniin
+        });
+      });
+    }
+
+    //lataa haun kriteerien perusteella näytösajat
+        function showmovies() { 
+		 
+
+          console.log("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie());
+          $(".result").load("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie(), function (elokuvadata) { //lataa tulokset resultteihin
+            xmlDoc = $.parseXML(elokuvadata), //parsee elokuvadatan xml muotoon
+              $xml = $(xmlDoc),
+              $shows = $xml.find("Show"); //jquery joka etsii showt
+              $(".show").remove(); //poistaa edelliset tulokset
+            $.each($shows, function (val, text) { //jquery joka suorittaa funktion jokaiselle leffalle
+
+
+              var title = $(this).find('Title').text(); //määrittää elokuvan
+
+              var start = $(this).find('dttmShowStart').text(); //näytösajan alun,
+              var end = $(this).find('dttmShowEnd').text(); //lopun,
+              var theatre = $(this).find('Theatre').text(); //ja teatterin
+
+
+
+              
+			  $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");//lisää ylläolevat muuttujat listaan
+
+			});
+          });
+		fadeInLista();		// Listan ollessa valmis, kutsutaan funktio, joka tuo listan näkyviin.
+        }
+
+       //Tarkistaa, onko tämä ensimmäinen kerta, kun ohjelmiston näyttävää nappia painetaan ja sen kautta suorittaa tietyt funktiot. Tämä funktion avulla ohjelam tietää että lista pitää piilottaa enne sen päivittämistä
+        function IsItsFirst() {
+    if ( typeof IsItsFirst.counter == 'undefined' ) {      // Tarkistaa, onko tämän funktion laskin määrittelemätön. Ensimmäistä kertaa, kun funktiota kutsutaan, ei sen laskimella ole arvoa.
+   
+        IsItsFirst.counter = 1;			 // Jos funktion laskimella ei ole arvoa, annetaan sille arvoksi 1, jotta tämä funktio ei palaa ensimmäisen kutsun jälkeen tähän komentoon.
+        // Lopuksi funktio kutsuu funktiot, jotka näyttävät hakukriteerien mukaan näytösajat sivulla.	   
+	    showmovies();					
+		loadSchedule(getSelectedTheatre(), getSelectedTime());
+    }
+	else
+	fadeOutlist();		// Jos funktion laskimella on jo valmis arvo (mikä sille annettiin ensimmäisellä suorituskerralla), kutsuu tämä funktion, joka poistaa vanhan listan ennen uutta listaa.
+        }                          
+
+		// Funktio poistaa vanhan listan näkyvistä. Tämä funktio ajetaan ensimmäisen näytöslistan jälkeen aina, koska ohjelmiston näyttämisnappi suorittaa aluksi IsItsFirst-funktion.
+		function fadeOutlist() {
+		$("#lista").fadeOut(1000);		//Lista poistetaan näkyvistä fadeout animaatiolla.
+		setTimeout(function(){			// Ajastus funktio odottaa listan katoamista näkyvistä ennekuin suorittaa funktiot, jotka näyttävät uuden listan hakukriteerien perusteella
+		        showmovies();
+		loadSchedule(getSelectedTheatre(), getSelectedTime());
+		}, 900);
+
+        }   
+		
+				// Funktio tuo listan näkyviin.
+		function fadeInLista() {
+		$("#lista").fadeIn(1000);		//Lista tuodaan näkyviin fadeout animaatiolla.
+	
+
+        }  
+		
+        //muokkaa pvm formaattia
+        function dateFormat(str) {
+          var date = new Date(str);
+          return date.getDate()+ "."+ (date.getMonth()+1) +"."+date.getFullYear();
+        }                          //javascript kuukaudet 0-11
+
+        //muokkaa klo formaattia
+        function timeFormat(str) {
+          var date = new Date(str);
+
+          // lisää etunollan minuutteihin
+          if(date.getMinutes()<10){
+            return date.getHours()+ ":0"+ date.getMinutes();
+          }
+
+          //hakee tunnit:minuutit
+          else
+          return date.getHours()+ ":"+ date.getMinutes();
+        }
+  </script> <!-- JavaScript päättyy -->
+</head>
+
+<body>					<!-- Sivun sisältö alkaa -->
+  <div class="banner">
+    <h1>MIAULXRAFFE</h1>
+    <h2>Movie Information APP Using Live XML-REST API from Finnkino (Easy)</h2>
+  </div>
+  <div class="valikko">
+    <div class="reunafilmi"> <!-- Reunafilmi on valikoiden ylä- ja alapuolella olevat div lohkot, jotka saavat valikopalkit näyttämään olevan perinteisen filminauhan sisällä. Päätimme muokata div lohkon kokoa <br> tageillä.  -->
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    </div>
+    <form onsubmit="return false">
+      <br>
+      <select name="teatteri" id="teatteri">
+
+      </select>
+
+      <center><select name="aika" id="aika">
+        <option selected value="base">Tänään</option>
+
+      </select></center>
+
+      <select name="elokuva" id="elokuva">
+        <option selected value="base">Valitse Elokuva</option>
+      </select>
+      <br>
+      <center><button type="submit" class="Go" onclick="IsItsFirst();"><span>Näytä ohjelmisto</span></button> <!-- Nappia painasse kutsutaan IsItsFirst funktio, joka tarkistaa, onko tämä ensimmäinen kerta, kun nappia painetaan.
+																												   Tarkistus on sitä varten, että ohjelma osaa tuoda ensimmäisen listan esiin Fadein-animaatiolla sekä lisäksi
+																												   poistaa listan näkyvistä ennen sen päivittämistä. Näin Listojen päivitykseen saadaan sulava vaihtumisanimaatio.
+																												   
+																												   Tarkistuken jälkeen ohjelma joko tuo ensimmäisen listan näkyviin, tai poistaa listan näkyvistä ja tuo uuden tilalle.-->
+	</center>
+    </form>
+    <br>
+  </div>
+  <div class="reunafilmi"> 		<!-- Reunafilmi on valikoiden ylä- ja alapuolella olevat div lohkot, jotka saavat valikopalkit näyttämään olevan perinteisen filminauhan sisällä. Päätimme muokata div lohkon kokoa <br> tageillä.  -->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+  <div class="result">
+  </div>
+  <table id="lista">
+    <tr>
+      <th>Nimi</th>
+      <th>Aika</th>
+      <th>Teatteri</th>
+    </tr>
+  </table>
+
+</body> 		<!-- Sivun sisältö päättyy -->
+
+</html>
