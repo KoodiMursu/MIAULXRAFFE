@@ -9,16 +9,15 @@
   <title>MIAULXRAFFE</title>
   <link href="style.css" rel="stylesheet">
   <script
-      src="http://code.jquery.com/jquery-3.3.1.min.js"     
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous">
-    </script>
+  <script src="http://code.jquery.com/jquery-2.1.4.min.js
+  "></script>
+
 
   <script> <!-- JavaScript alkaa -->
 
     //suorittaa funktiot sivun latautuessa
     $(document).ready(function () { //jquery joka tekee juttuja kun sivu latautuu
-      
+
 	  loadTheatres();
       loadScheduleDates();
       loadSchedule(getSelectedTheatre(), getSelectedTime());
@@ -36,7 +35,7 @@
         loadSchedule();
       })
     });
-	
+
 // Piiloittaa otsikot ja listan pohjan sivulta näkyvistä. Lisäksi funtio tuo otsikot näkyviin FadeIn-funktiolla.
 	function showfadein() {
     $(document).ready(function(){
@@ -125,8 +124,8 @@
     }
 
     //lataa haun kriteerien perusteella näytösajat
-        function showmovies() { 
-		 
+        function showmovies() {
+
 
           console.log("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie());
           $(".result").load("https://www.finnkino.fi/xml/Schedule/?area="+getSelectedTheatre()+"&dt="+dateFormat(getSelectedTime())+"&eventID="+ getSelectedMovie(), function (elokuvadata) { //lataa tulokset resultteihin
@@ -145,7 +144,7 @@
 
 
 
-              
+
 			  $('#lista').append("<tr class=\"show\"><td>"+title+"</td><td>"+timeFormat(start) +"-"+ timeFormat(end) +"</td><td>"+theatre+"</td></tr>");//lisää ylläolevat muuttujat listaan
 
 			});
@@ -156,15 +155,15 @@
        //Tarkistaa, onko tämä ensimmäinen kerta, kun ohjelmiston näyttävää nappia painetaan ja sen kautta suorittaa tietyt funktiot. Tämä funktion avulla ohjelam tietää että lista pitää piilottaa enne sen päivittämistä
         function IsItsFirst() {
     if ( typeof IsItsFirst.counter == 'undefined' ) {      // Tarkistaa, onko tämän funktion laskin määrittelemätön. Ensimmäistä kertaa, kun funktiota kutsutaan, ei sen laskimella ole arvoa.
-   
+
         IsItsFirst.counter = 1;			 // Jos funktion laskimella ei ole arvoa, annetaan sille arvoksi 1, jotta tämä funktio ei palaa ensimmäisen kutsun jälkeen tähän komentoon.
-        // Lopuksi funktio kutsuu funktiot, jotka näyttävät hakukriteerien mukaan näytösajat sivulla.	   
-	    showmovies();					
+        // Lopuksi funktio kutsuu funktiot, jotka näyttävät hakukriteerien mukaan näytösajat sivulla.
+	    showmovies();
 		loadSchedule(getSelectedTheatre(), getSelectedTime());
     }
 	else
 	fadeOutlist();		// Jos funktion laskimella on jo valmis arvo (mikä sille annettiin ensimmäisellä suorituskerralla), kutsuu tämä funktion, joka poistaa vanhan listan ennen uutta listaa.
-        }                          
+        }
 
 		// Funktio poistaa vanhan listan näkyvistä. Tämä funktio ajetaan ensimmäisen näytöslistan jälkeen aina, koska ohjelmiston näyttämisnappi suorittaa aluksi IsItsFirst-funktion.
 		function fadeOutlist() {
@@ -174,15 +173,15 @@
 		loadSchedule(getSelectedTheatre(), getSelectedTime());
 		}, 900);
 
-        }   
-		
+        }
+
 				// Funktio tuo listan näkyviin.
 		function fadeInLista() {
 		$("#lista").fadeIn(1000);		//Lista tuodaan näkyviin fadeout animaatiolla.
-	
 
-        }  
-		
+
+        }
+
         //muokkaa pvm formaattia
         function dateFormat(str) {
           var date = new Date(str);
@@ -240,7 +239,7 @@
       <center><button type="submit" class="Go" onclick="IsItsFirst();"><span>Näytä ohjelmisto</span></button> <!-- Nappia painasse kutsutaan IsItsFirst funktio, joka tarkistaa, onko tämä ensimmäinen kerta, kun nappia painetaan.
 																												   Tarkistus on sitä varten, että ohjelma osaa tuoda ensimmäisen listan esiin Fadein-animaatiolla sekä lisäksi
 																												   poistaa listan näkyvistä ennen sen päivittämistä. Näin Listojen päivitykseen saadaan sulava vaihtumisanimaatio.
-																												   
+
 																												   Tarkistuken jälkeen ohjelma joko tuo ensimmäisen listan näkyviin, tai poistaa listan näkyvistä ja tuo uuden tilalle.-->
 	</center>
     </form>
